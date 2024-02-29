@@ -27,6 +27,7 @@ public class PlayerMover : MonoBehaviour
         Vector3 rightDir = Camera.main.transform.right;
         rightDir = new Vector3(rightDir.x, 0, rightDir.z).normalized;
 
+        Jump();
         controller.Move(forwardDir * moveDir.z * moveSpeed * Time.deltaTime);
         controller.Move(rightDir * moveDir.x * moveSpeed * Time.deltaTime);
 
@@ -45,5 +46,21 @@ public class PlayerMover : MonoBehaviour
         moveDir.z = input.y;
 
         animator.SetFloat("MoveSpeed", moveDir.magnitude);
+    }
+
+    // Test..
+    private float ySpeed;
+    [SerializeField] float jumpSpeed;
+
+    private void Jump()
+    {
+        ySpeed += Physics.gravity.y * Time.deltaTime;
+
+        controller.Move(Vector3.up * ySpeed * Time.deltaTime);
+    }
+
+    private void OnJump(InputValue value)
+    {
+        ySpeed = jumpSpeed;
     }
 }
