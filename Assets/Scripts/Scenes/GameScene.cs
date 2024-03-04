@@ -4,36 +4,36 @@ using UnityEngine;
 
 public class GameScene : BaseScene
 {
-    [SerializeField] Monster monsterPrefab;
-    [SerializeField] Transform spawnPoint;
-    [SerializeField] int count;
+    [SerializeField] Transform player;
+    [SerializeField] CharacterController playerController;
 
     public override IEnumerator LoadingRoutine()
     {
-        Debug.Log("GameScene Load");
-        // fake loading
-        yield return new WaitForSecondsRealtime(0.5f);
-        Manager.Scene.SetLoadingBarValue(0.7f);
-        Debug.Log("Player Spawn");
-        yield return new WaitForSecondsRealtime(0.5f);
-        Manager.Scene.SetLoadingBarValue(0.9f);
-        Debug.Log("Ready ObjectPool");
-
-        /*for (int i = 0; i < count; i++)
-        {
-            Vector2 randomOffset = Random.insideUnitCircle * 3;
-            Vector3 spawnPos = spawnPoint.position + new Vector3(randomOffset.x, 0, randomOffset.y);
-            Monster monster = Instantiate(monsterPrefab, spawnPos, Quaternion.identity);
-
-            yield return new WaitForSecondsRealtime(0.5f);
-        }*/
-
-        yield return new WaitForSecondsRealtime(0.5f);
+        yield return null;
         Debug.Log("Loading complete");
     }
 
     public void ToTitleScene()
     {
         Manager.Scene.LoadScene("TitleScene");
+    }
+
+    public override void SceneSave()
+    {
+        Manager.Data.gameData.gameSceneData.playerPos = player.position;
+        Manager.Data.gameData.sceneSaved[Manager.Scene.GetCurSceneIndex()] = true;
+        Manager.Data.SaveData();
+    }
+
+    public override void SceneLoad()
+    {
+        if (Manager.Data.gameData.sceneSaved[Manager.Scene.GetCurSceneIndex()] == false)
+            return;
+
+        Manager.Data.LoadData();
+        Debug.Log(Manager.Data.gameData.gameSceneData.playerPos);
+        playerController.enabled = false;
+        player.position = Manager.Data.gameData.gameSceneData.playerPos;
+        playerController.enabled = true;
     }
 }

@@ -17,3 +17,38 @@
  * 단점
  * 1. 인터페이스를 직접 포함하지 않으므로 인터페이스를 가짐으로 얻을 수 있는 가독성을 얻지 못한다.
  */
+
+namespace DesignPattern
+{
+    public class DollarCustomer
+    {
+        public Exchanger exchanger;
+
+        public void Buy()
+        {
+            // 물건 구매
+            exchanger.Change();
+        }
+    }
+
+    public class KRWStore
+    {
+        public Exchanger exchanger;
+
+        public void Sell()
+        {
+            // 물건 판매
+        }
+    }
+
+    public class Exchanger
+    {
+        public DollarCustomer customer;
+        public KRWStore store;
+
+        public void Change()
+        {
+            store.Sell();
+        }
+    }
+}

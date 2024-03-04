@@ -53,7 +53,6 @@ public class PlayerAttacker : MonoBehaviour
     {
         /*if (EventSystem.current.IsPointerOverGameObject())
             return;*/
-
         Attack();
     }
 
